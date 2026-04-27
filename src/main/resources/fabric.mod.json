@@ -1,0 +1,33 @@
+{
+    "schemaVersion": 1,
+    "id": "villager_armour",
+    "version": "${version}",
+    "name": "Villager Armour",
+    "description": "Shows the armour villagers are wearing.",
+    "authors": ["Nanaky"],
+    "contact": {
+        "homepage": "https://github.com/nanakytim",
+        "sources": "https://github.com/nanakytim/villager_armour"
+    },
+    "license": "GPL-3.0",
+    "icon": "icon.png",
+    "environment": "client",
+    "entrypoints": {
+        "main": ["net.nanaky.villager_armour.VillagerArmour"],
+        "client": [
+            "net.nanaky.villager_armour.VillagerArmourClient"
+        ]
+    },
+    "mixins": [
+        {
+            "config": "villager_armour_mixins.json",
+            "environment": "client"
+        }
+    ],
+    "depends": {
+        "fabricloader": ">=0.18.4",
+        "minecraft": "~26.1",
+        "java": ">=25",
+        "fabric-api": "*"
+    }
+}

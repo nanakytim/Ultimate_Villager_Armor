@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.nanaky.villager_armour.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "client": [
+    "LivingEntityRendererInvoker",
+    "VillagerRendererStateMixin",
+    "VillagerRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
