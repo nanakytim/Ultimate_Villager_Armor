@@ -13,6 +13,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.equipment.Equippable;
 import net.nanaky.villager_armour.client.models.VillagerElytraModel;
 import net.nanaky.villager_armour.client.state.IHumanoidRenderState;
+import net.nanaky.villager_armour.config.Config;
+import net.nanaky.villager_armour.config.ConfigManager;
 
 public class VillagerWingsLayer<S extends LivingEntityRenderState, M extends EntityModel<S>>
         extends RenderLayer<S, M> {
@@ -30,7 +32,10 @@ public class VillagerWingsLayer<S extends LivingEntityRenderState, M extends Ent
     @Override
     @SuppressWarnings("unchecked")
     public void submit(PoseStack poseStack, SubmitNodeCollector collector, int uv2,
-                       S state, float netHeadYaw, float headPitch) {
+                    S state, float netHeadYaw, float headPitch) {
+        Config cfg = ConfigManager.INSTANCE;
+        if (!cfg.renderElytra) return;
+
         IHumanoidRenderState hs = (IHumanoidRenderState) state;
         ItemStack itemStack = hs.val$chestEquipment();
         if (itemStack.isEmpty()) return;
@@ -38,18 +43,20 @@ public class VillagerWingsLayer<S extends LivingEntityRenderState, M extends Ent
         if (equippable == null || equippable.assetId().isEmpty()) return;
 
         poseStack.pushPose();
-        poseStack.translate(0.0F, 0.0F, 0.125F);
+        poseStack.translate(
+                cfg.elytraOffsetX / 16f,
+                cfg.elytraOffsetY / 16f,
+                0.125F + cfg.elytraOffsetZ / 16f);
+        poseStack.scale(cfg.elytraScale, cfg.elytraScale, cfg.elytraScale);
+
         elytraModel.setupAnim(state);
         this.equipmentRenderer.renderLayers(
                 EquipmentClientInfo.LayerType.WINGS,
                 equippable.assetId().orElseThrow(),
                 (net.minecraft.client.model.Model<S>) elytraModel,
-                state,
-                itemStack,
-                poseStack,
-                collector,
-                uv2,
-                state.outlineColor);
+                state, itemStack, poseStack, collector,
+                uv2, state.outlineColor);
+
         poseStack.popPose();
     }
 }

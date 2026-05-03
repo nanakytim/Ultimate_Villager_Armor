@@ -14,6 +14,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.equipment.Equippable;
 import net.nanaky.villager_armour.client.models.IHumanoidModel;
 import net.nanaky.villager_armour.client.state.IHumanoidRenderState;
+import net.nanaky.villager_armour.config.Config;
+import net.nanaky.villager_armour.config.ConfigManager;
 
 public class VillagerArmourLayers
         <S extends LivingEntityRenderState,
@@ -28,8 +30,8 @@ public class VillagerArmourLayers
     private final EquipmentLayerRenderer equipmentRenderer;
 
     public VillagerArmourLayers(RenderLayerParent<S, M> renderer,
-                                 A headModel, A chestModel, A legsModel, A feetModel,
-                                 EquipmentLayerRenderer equipmentRenderer) {
+                                A headModel, A chestModel, A legsModel, A feetModel,
+                                EquipmentLayerRenderer equipmentRenderer) {
         super(renderer);
         this.headModel  = headModel;
         this.chestModel = chestModel;
@@ -39,23 +41,46 @@ public class VillagerArmourLayers
     }
 
     @Override
-    public void submit(PoseStack poseStack, SubmitNodeCollector collector, int lightCoords, S state, float yRot, float xRot) {
+    public void submit(PoseStack poseStack, SubmitNodeCollector collector,
+                       int lightCoords, S state, float yRot, float xRot) {
+        Config cfg = ConfigManager.INSTANCE;
         IHumanoidRenderState hs = (IHumanoidRenderState) state;
 
-        renderArmorPiece(poseStack, collector, state, hs.val$headEquipment(),  EquipmentSlot.HEAD,  lightCoords, headModel);
-        renderArmorPiece(poseStack, collector, state, hs.val$chestEquipment(), EquipmentSlot.CHEST, lightCoords, chestModel);
-        renderArmorPiece(poseStack, collector, state, hs.val$legEquipment(),   EquipmentSlot.LEGS,  lightCoords, legsModel);
-        renderArmorPiece(poseStack, collector, state, hs.val$feetEquipment(),  EquipmentSlot.FEET,  lightCoords, feetModel);
+        if (cfg.renderHelmet)
+            renderArmorPiece(poseStack, collector, state, hs.val$headEquipment(),
+                    EquipmentSlot.HEAD, lightCoords, headModel,
+                    cfg.helmetOffsetX, cfg.helmetOffsetY, cfg.helmetOffsetZ,cfg.helmetScale);
+
+        if (cfg.renderChestplate)
+            renderArmorPiece(poseStack, collector, state, hs.val$chestEquipment(),
+                    EquipmentSlot.CHEST, lightCoords, chestModel,
+                    cfg.chestOffsetX, cfg.chestOffsetY, cfg.chestOffsetZ, cfg.chestScale);
+
+        if (cfg.renderLeggings)
+            renderArmorPiece(poseStack, collector, state, hs.val$legEquipment(),
+                    EquipmentSlot.LEGS, lightCoords, legsModel,
+                    cfg.legsOffsetX, cfg.legsOffsetY, cfg.legsOffsetZ, cfg.legsScale);
+
+        if (cfg.renderBoots)
+            renderArmorPiece(poseStack, collector, state, hs.val$feetEquipment(),
+                    EquipmentSlot.FEET, lightCoords, feetModel,
+                    cfg.feetOffsetX, cfg.feetOffsetY, cfg.feetOffsetZ, cfg.feetScale);
     }
 
     @SuppressWarnings("unchecked")
     private void renderArmorPiece(PoseStack poseStack, SubmitNodeCollector collector, S state,
-                                   ItemStack itemStack, EquipmentSlot slot, int lightCoords, A model) {
+                                ItemStack itemStack, EquipmentSlot slot, int lightCoords, A model,
+                                float offsetX, float offsetY, float offsetZ, float scale) {
         if (itemStack.isEmpty()) return;
         Equippable equippable = itemStack.get(DataComponents.EQUIPPABLE);
         if (equippable == null || equippable.assetId().isEmpty() || equippable.slot() != slot) return;
+
         model.setupAnim(state);
         setPartVisibility(model, slot);
+
+        poseStack.pushPose();
+        poseStack.translate(offsetX / 16f, offsetY / 16f, offsetZ / 16f);
+        poseStack.scale(scale, scale, scale);   
 
         EquipmentClientInfo.LayerType layerType = (slot == EquipmentSlot.LEGS)
                 ? EquipmentClientInfo.LayerType.HUMANOID_LEGGINGS
@@ -65,12 +90,10 @@ public class VillagerArmourLayers
                 layerType,
                 equippable.assetId().orElseThrow(),
                 (net.minecraft.client.model.Model<S>) model,
-                state,
-                itemStack,
-                poseStack,
-                collector,
-                lightCoords,
-                state.outlineColor);
+                state, itemStack, poseStack, collector,
+                lightCoords, state.outlineColor);
+
+        poseStack.popPose();
     }
 
     protected void setPartVisibility(A model, EquipmentSlot slot) {

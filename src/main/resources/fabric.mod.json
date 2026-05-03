@@ -14,9 +14,8 @@
     "environment": "*",
     "entrypoints": {
         "main": ["net.nanaky.villager_armour.VillagerArmour"],
-        "client": [
-            "net.nanaky.villager_armour.VillagerArmourClient"
-        ]
+        "client": ["net.nanaky.villager_armour.VillagerArmourClient"],
+        "modmenu": ["net.nanaky.villager_armour.client.ModMenuIntegration"]
     },
     "mixins": [
         {
@@ -29,5 +28,9 @@
         "minecraft": "~26.1",
         "java": ">=25",
         "fabric-api": "*"
-    }
+    },
+	"suggests": {
+		"modmenu": "*",
+		"cloth-config": "*"
+	}
 }
