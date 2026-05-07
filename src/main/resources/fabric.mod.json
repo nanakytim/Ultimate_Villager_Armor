@@ -1,25 +1,25 @@
 {
     "schemaVersion": 1,
-    "id": "villager_armour",
+    "id": "ultimate_villager_armour",
     "version": "${version}",
-    "name": "Villager Armour",
+    "name": "Ultimate Villager Armour",
     "description": "Shows the armour villagers are wearing.",
     "authors": ["Nanaky"],
     "contact": {
         "homepage": "https://github.com/nanakytim",
-        "sources": "https://github.com/nanakytim/villager_armour"
+        "sources": "https://github.com/nanakytim/ultimate_villager_armour"
     },
     "license": "GPL-3.0",
     "icon": "icon.png",
     "environment": "*",
     "entrypoints": {
-        "main": ["net.nanaky.villager_armour.VillagerArmour"],
-        "client": ["net.nanaky.villager_armour.VillagerArmourClient"],
-        "modmenu": ["net.nanaky.villager_armour.client.ModMenuIntegration"]
+        "main": ["net.nanaky.ultimate_villager_armour.UltimateVillagerArmour"],
+        "client": ["net.nanaky.ultimate_villager_armour.UltimateVillagerArmourClient"],
+        "modmenu": ["net.nanaky.ultimate_villager_armour.client.ModMenuIntegration"]
     },
     "mixins": [
         {
-            "config": "villager_armour_mixins.json",
+            "config": "ultimate_villager_armour_mixins.json",
             "environment": "client"
         }
     ],
