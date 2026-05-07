@@ -1,4 +1,4 @@
-<img width="360" height="360" alt="villager\_armor" src="https://github.com/user-attachments/assets/a13b744e-7a0f-4f52-88b3-3c5ac1105fa8" />
+<img width="512" height="512" alt="ultimate_villager_armor" src="https://github.com/user-attachments/assets/537dad11-7501-42f0-bba0-4ffaebb0c7cc" />
 
 # This mod finally adds rendering to the armour your villager are wearing!
 
